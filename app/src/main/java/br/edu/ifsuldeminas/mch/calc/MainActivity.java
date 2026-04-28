@@ -54,10 +54,31 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener tratadorDeDigitacao = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                calculoRealizado = false;
-
                 Button botaoPressionado = (Button) view;
-                expressaoAtual += botaoPressionado.getText().toString();
+                String textoBotao = botaoPressionado.getText().toString();
+                String operadores = "+-*÷%,";
+
+                if (calculoRealizado) {
+                    if (!operadores.contains(textoBotao)) {
+                        expressaoAtual = "";
+                        textViewUltimaExpressao.setText("");
+                    }
+
+                    calculoRealizado = false;
+                }
+
+                if (expressaoAtual.length() > 0) {
+                    String ultimoCaractere = expressaoAtual.substring(expressaoAtual.length() - 1);
+                    if (operadores.contains(ultimoCaractere) && operadores.contains(textoBotao)) {
+                        expressaoAtual = expressaoAtual.substring(0, expressaoAtual.length() - 1);
+                    }
+                } else {
+                    if (operadores.contains(textoBotao) && !textoBotao.equals("-")) {
+                        return;
+                    }
+                }
+
+                expressaoAtual += textoBotao;
                 textViewResultado.setText(expressaoAtual);
             }
         };
